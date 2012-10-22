@@ -1,0 +1,20 @@
+https://bugzilla.gnome.org/show_bug.cgi?id=674483
+
+--- origsrc/glib-2.32.4/configure.ac	2012-07-14 16:44:07.000000000 -0500
++++ src/glib-2.32.4/configure.ac	2012-09-03 22:23:12.162019800 -0500
+@@ -3447,12 +3447,14 @@ esac
+ 
+ AC_CHECK_TYPE([guint32],,,[typedef unsigned $gint32 guint32;])
+ AC_CHECK_ALIGNOF([guint32], [AC_INCLUDES_DEFAULT
++#include <stddef.h>
+ typedef unsigned $gint32 guint32;])
+ AC_CHECK_TYPE([guint64],,,[typedef unsigned $gint64 guint64;])
+ AC_CHECK_ALIGNOF([guint64], [AC_INCLUDES_DEFAULT
++#include <stddef.h>
+ typedef unsigned $gint64 guint64;])
+ AC_CHECK_TYPE([unsigned long])
+-AC_CHECK_ALIGNOF([unsigned long])
++AC_CHECK_ALIGNOF([unsigned long], [#include <stddef.h>])
+ 
+ # Check for libdbus1 - Optional - is only used in the GDBus test cases
+ #

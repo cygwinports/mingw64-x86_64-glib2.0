@@ -1,0 +1,30 @@
+NAME="mingw64-x86_64-glib2.0"
+VERSION=2.32.4
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="GNOME core C function library for Win64 toolchain"
+HOMEPAGE="http://www.gtk.org/"
+DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
+contains msvcrt-linked binaries (aka 'mingw').  It is for use with the
+mingw64-x86_64-gcc cross compiler, and installs into the
+/usr/x86_64-w64-mingw32/sys-root/mingw/{lib,include} directories."
+CROSS_HOST="x86_64-w64-mingw32"
+ORIG_PN="glib"
+inherit cross gnome2
+
+PATCH_URI="2.32-autoconf.patch  2.32-bgo674452.patch"
+
+DIFF_EXCLUDES="config.py"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	rm -f ${D}${CROSS_BINDIR}/gdbus-codegen
+	rm -f ${D}${CROSS_BINDIR}/glib-{compile-resources,genmarshal,gettextize,mkenums}*
+	rm -fr ${D}${CROSS_LIBDIR}/{charset.alias,gdbus-2.0/}
+	rm -fr ${D}${CROSS_DATADIR}/{bash-completion,gdb,man}/
+	rm -fr ${D}${CROSS_DATADIR}/glib-2.0/{gdb,gettext}
+}
+
+KEEP_LA_FILES="none"
