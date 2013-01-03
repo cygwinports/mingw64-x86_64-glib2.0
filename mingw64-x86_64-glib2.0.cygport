@@ -1,5 +1,5 @@
 NAME="mingw64-x86_64-glib2.0"
-VERSION=2.32.4
+VERSION=2.34.3
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="GNOME core C function library for Win64 toolchain"
@@ -12,7 +12,9 @@ CROSS_HOST="x86_64-w64-mingw32"
 ORIG_PN="glib"
 inherit cross gnome2
 
-PATCH_URI="2.32-autoconf.patch  2.32-bgo674452.patch"
+PATCH_URI="
+	http://git.gnome.org/browse/glib/patch/gio/tests/gdbus-proxy.c?id=d9e8fea
+"
 
 DIFF_EXCLUDES="config.py"
 
@@ -26,5 +28,3 @@ src_install() {
 	rm -fr ${D}${CROSS_DATADIR}/{bash-completion,gdb,man}/
 	rm -fr ${D}${CROSS_DATADIR}/glib-2.0/{gdb,gettext}
 }
-
-KEEP_LA_FILES="none"
