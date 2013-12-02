@@ -1,6 +1,10 @@
+CROSS_HOST="x86_64-w64-mingw32"
+ORIG_PN="glib"
+inherit cross gnome2
+
 NAME="mingw64-x86_64-glib2.0"
-VERSION=2.34.3
-RELEASE=1
+VERSION=2.36.4
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="GNOME core C function library for Win64 toolchain"
 HOMEPAGE="http://www.gtk.org/"
@@ -8,23 +12,42 @@ DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
 contains msvcrt-linked binaries (aka 'mingw').  It is for use with the
 mingw64-x86_64-gcc cross compiler, and installs into the
 /usr/x86_64-w64-mingw32/sys-root/mingw/{lib,include} directories."
-CROSS_HOST="x86_64-w64-mingw32"
-ORIG_PN="glib"
-inherit cross gnome2
 
 PATCH_URI="
-	http://git.gnome.org/browse/glib/patch/gio/tests/gdbus-proxy.c?id=d9e8fea
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/0001-Use-CreateFile-on-Win32-to-make-sure-g_unlink-always.patch?h=f19
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-send-log-messages-to-correct-stdout-and-stderr.patch?h=f19
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-formatstring.patch?h=f19
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-prefer-constructors-over-DllMain.patch?h=f19
+	2.34.3-m4macros.patch
 "
 
 DIFF_EXCLUDES="config.py"
 
+src_compile() {
+	cd ${S}
+	gnome2_autoreconf
+
+	# static and shared cannot be built simultaneously
+	mkdir -p ${B}/shared
+	cd ${B}/shared
+	gnome2_configure --enable-shared --disable-static
+	cygmake
+
+	mkdir -p ${B}/static
+	cd ${B}/static
+	gnome2_configure --disable-shared --enable-static
+	cygmake
+}
+
 src_install() {
-	cd ${B}
+	cd ${B}/static
+	cyginstall
+	cd ${B}/shared
 	cyginstall
 
 	rm -f ${D}${CROSS_BINDIR}/gdbus-codegen
 	rm -f ${D}${CROSS_BINDIR}/glib-{compile-resources,genmarshal,gettextize,mkenums}*
-	rm -fr ${D}${CROSS_LIBDIR}/{charset.alias,gdbus-2.0/}
+	rm -fr ${D}${CROSS_LIBDIR}/charset.alias
 	rm -fr ${D}${CROSS_DATADIR}/{bash-completion,gdb,man}/
-	rm -fr ${D}${CROSS_DATADIR}/glib-2.0/{gdb,gettext}
+	rm -fr ${D}${CROSS_DATADIR}/glib-2.0/{codegen,gdb,gettext}
 }
