@@ -3,7 +3,7 @@ ORIG_PN="glib"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-glib2.0"
-VERSION=2.38.2
+VERSION=2.42.1
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="GNOME core C function library for Win64 toolchain"
@@ -14,9 +14,9 @@ mingw64-x86_64-gcc cross compiler, and installs into the
 /usr/x86_64-w64-mingw32/sys-root/mingw/{lib,include} directories."
 
 PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/0001-Use-CreateFile-on-Win32-to-make-sure-g_unlink-always.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-send-log-messages-to-correct-stdout-and-stderr.patch?h=f19
-	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-prefer-constructors-over-DllMain.patch?h=f20
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/0001-Use-CreateFile-on-Win32-to-make-sure-g_unlink-always.patch?
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-send-log-messages-to-correct-stdout-and-stderr.patch
+	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-prefer-constructors-over-DllMain.patch
 	2.34.3-m4macros.patch
 "
 
@@ -26,7 +26,9 @@ src_compile() {
 	cd ${S}
 	gnome2_autoreconf
 	cd ${B}
-	gnome2_configure --disable-static
+	gnome2_configure --disable-static \
+		ac_cv_func_if_nametoindex=yes \
+		ac_cv_func_if_indextoname=yes
 	cygmake
 }
 
