@@ -3,7 +3,7 @@ ORIG_PN="glib"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-glib2.0"
-VERSION=2.46.2
+VERSION=2.50.3
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="GNOME core C function library for Win64 toolchain"
@@ -15,7 +15,6 @@ mingw64-x86_64-gcc cross compiler, and installs into the
 
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/0001-Use-CreateFile-on-Win32-to-make-sure-g_unlink-always.patch?
-	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-send-log-messages-to-correct-stdout-and-stderr.patch
 	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/glib-prefer-constructors-over-DllMain.patch
 	http://pkgs.fedoraproject.org/cgit/mingw-glib2.git/plain/0002-GNetworkMonitorBase-don-t-fail-when-IPv6-support-is-.patch
 	2.34.3-m4macros.patch
